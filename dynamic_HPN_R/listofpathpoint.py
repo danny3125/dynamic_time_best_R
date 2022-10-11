@@ -13,7 +13,7 @@ class input_handler:
         self.cornershape = 4
         self.dim_of_point = 2
         self.num_rec = 25
-    def zig_zag_path(self,path_corners_index): #path corners index = [[start_corner_index, end_corner_index], ....] = array 2d (path_lengh,2)
+    def zig_zag_path(self,path_corners_index,visit_time): #path corners index = [[start_corner_index, end_corner_index], ....] = array 2d (path_lengh,2)
         #now I have the mapping tool, it's time to map it again to a corner list [0,1] => [0,0,0,0,1,1,1,1]
         path_gazebo = []
         path_corners = []
@@ -25,9 +25,18 @@ class input_handler:
         plt.plot(data[:, 0], data[:, 1],color = 'black')
         data_1 = np.array(self.X_all)
         data_1 = np.reshape(data_1,(self.num_rec,self.cornershape,self.dim_of_point))
+        color_index = 0
         for rec in data_1:
             rec = np.concatenate((rec,[rec[0]]),axis= 0)
-            plt.plot(rec[:, 0], rec[:, 1],color = 'red')
+            if visit_time[color_index] == 1:
+                plt.plot(rec[:, 0], rec[:, 1],color = 'red')
+            elif visit_time[color_index] == 2:
+                plt.plot(rec[:, 0], rec[:, 1],color = 'blue')
+            elif visit_time[color_index] == 3:
+                plt.plot(rec[:, 0], rec[:, 1],color = 'green')
+            else:
+                plt.plot(rec[:, 0], rec[:, 1],color = 'yellow')
+            color_index += 1
         plt.show()
         '''
         for index in path_corners_index: #find the longer side => zig-zag to end point
